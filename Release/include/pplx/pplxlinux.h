@@ -270,7 +270,9 @@ namespace details
 
 // see: http://gcc.gnu.org/onlinedocs/gcc/Return-Address.html
 // this is critical to inline
+#ifndef _ReturnAddress
 __attribute__((always_inline)) inline void* _ReturnAddress() { return __builtin_return_address(0); }
+#endif
 
 } // namespace pplx
 
