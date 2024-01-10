@@ -754,6 +754,11 @@ will_deref_and_erase_t asio_server_connection::handle_http_line(const boost::sys
             requestImpl->_set_remote_address(utility::conversions::to_string_t(endpoint.address().to_string()));
         }
 
+        if(m_ssl_stream)
+        {
+            m_request._set_client_ssl(m_ssl_stream->native_handle());
+        }
+
         return handle_headers();
     }
 }
