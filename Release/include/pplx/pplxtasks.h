@@ -16,6 +16,7 @@
 #ifndef PPLXTASKS_H
 #define PPLXTASKS_H
 
+#include <iostream>
 #include "cpprest/details/cpprest_compat.h"
 
 #if (defined(_MSC_VER) && (_MSC_VER >= 1800)) && !CPPREST_FORCE_PPLX
@@ -1776,18 +1777,20 @@ struct _Task_impl_base
                     // unwrapped task are still running.
                     _M_TaskCollection._RunAndWait();
                 }
-                catch (details::_Interruption_exception&)
+                catch (details::_Interruption_exception& e)
                 {
                     // The _TaskCollection will never be an interruption point since it has a none token.
+                    cerr << "!!!naricc_debug!!! pplxtasks.h: Interruption_exception:" << e.what() << endl;
                     _ASSERTE(false);
                 }
-                catch (task_canceled&)
+                catch (task_canceled& e)
                 {
                     // task_canceled is a special exception thrown by cancel_current_task. The spec states that
                     // cancel_current_task must be called from code that is executed within the task (throwing it from
                     // parallel work created by and waited upon by the task is acceptable). We can safely assume that
                     // the task wrapper _PPLTaskHandle::operator() has seen the exception and canceled the task. Swallow
                     // the exception here.
+                    cerr << "!!!naricc_debug!!! pplxtasks.h: task cancelled:" << e.what() << endl;
                     _ASSERTE(_IsCanceled());
                 }
 #if defined(__cplusplus_winrt)
@@ -1795,6 +1798,8 @@ struct _Task_impl_base
                 {
                     // Its possible the task body hasn't seen the exception, if so we need to cancel with exception
                     // here.
+                    cerr << "!!!naricc_debug!!! pplxtasks.h: task cancelled:" << e.what() << endl;
+
                     if (!_HasUserException())
                     {
                         _CancelWithException(_E);
@@ -1807,12 +1812,25 @@ struct _Task_impl_base
                 {
                     // Its possible the task body hasn't seen the exception, if so we need to cancel with exception
                     // here.
+                    cerr << "!!!naricc_debug!!! pplxtasks.h: catch(...): current_exception: " << std::current_exception() << endl;
+
+
                     if (!_HasUserException())
                     {
                         _CancelWithException(std::current_exception());
                     }
-                    // Rethrow will mark the exception as observed.
-                    _M_exceptionHolder->_RethrowUserException();
+               
+                    try
+                    {
+                         var ex_ptr = std::current_exception()
+                         std::rethrow_exception(ex_ptr);
+                    }
+                    catch (std::exception e)
+                    {
+                        cerr << "!!!naricc_debug!!! << ppltasks: catch(...): " << e.what() << endl;
+                        // Rethrow will mark the exception as observed.
+                        _M_exceptionHolder->_RethrowUserException();
+                    }
                 }
 
                 // If the lambda body for this task (executed or waited upon in _RunAndWait above) happened to return a
