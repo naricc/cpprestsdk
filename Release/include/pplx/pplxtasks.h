@@ -19,6 +19,8 @@
 #include <iostream>
 #include "cpprest/details/cpprest_compat.h"
 
+using namespace std;
+
 #if (defined(_MSC_VER) && (_MSC_VER >= 1800)) && !CPPREST_FORCE_PPLX
 #include <ppltasks.h>
 namespace pplx = Concurrency;
@@ -1812,7 +1814,7 @@ struct _Task_impl_base
                 {
                     // Its possible the task body hasn't seen the exception, if so we need to cancel with exception
                     // here.
-                    cerr << "!!!naricc_debug!!! pplxtasks.h: catch(...): current_exception: " << std::current_exception() << endl;
+                    cerr << "!!!naricc_debug!!! pplxtasks.h: catch(...) " << endl;
 
 
                     if (!_HasUserException())
@@ -1822,7 +1824,7 @@ struct _Task_impl_base
                
                     try
                     {
-                         var ex_ptr = std::current_exception()
+                         exception_ptr ex_ptr = std::current_exception();
                          std::rethrow_exception(ex_ptr);
                     }
                     catch (std::exception e)
