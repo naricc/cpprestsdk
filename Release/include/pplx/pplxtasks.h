@@ -1782,7 +1782,7 @@ struct _Task_impl_base
                 catch (details::_Interruption_exception& e)
                 {
                     // The _TaskCollection will never be an interruption point since it has a none token.
-                    cerr << "!!!naricc_debug!!! pplxtasks.h: Interruption_exception:" << e.what() << endl;
+                    cout << "!!!naricc_debug!!! pplxtasks.h: Interruption_exception:" << e.what() << endl;
                     _ASSERTE(false);
                 }
                 catch (task_canceled& e)
@@ -1792,7 +1792,7 @@ struct _Task_impl_base
                     // parallel work created by and waited upon by the task is acceptable). We can safely assume that
                     // the task wrapper _PPLTaskHandle::operator() has seen the exception and canceled the task. Swallow
                     // the exception here.
-                    cerr << "!!!naricc_debug!!! pplxtasks.h: task cancelled:" << e.what() << endl;
+                    cout << "!!!naricc_debug!!! pplxtasks.h: task cancelled:" << e.what() << endl;
                     _ASSERTE(_IsCanceled());
                 }
 #if defined(__cplusplus_winrt)
@@ -1800,7 +1800,7 @@ struct _Task_impl_base
                 {
                     // Its possible the task body hasn't seen the exception, if so we need to cancel with exception
                     // here.
-                    cerr << "!!!naricc_debug!!! pplxtasks.h: task cancelled:" << e.what() << endl;
+                    cout << "!!!naricc_debug!!! pplxtasks.h: task cancelled:" << e.what() << endl;
 
                     if (!_HasUserException())
                     {
@@ -1814,7 +1814,7 @@ struct _Task_impl_base
                 {
                     // Its possible the task body hasn't seen the exception, if so we need to cancel with exception
                     // here.
-                    cerr << "!!!naricc_debug!!! pplxtasks.h: catch(...) " << endl;
+                    cout << "!!!naricc_debug!!! pplxtasks.h: catch(...) " << endl;
 
 
                     if (!_HasUserException())
@@ -1829,7 +1829,7 @@ struct _Task_impl_base
                     }
                     catch (std::exception e)
                     {
-                        cerr << "!!!naricc_debug!!! << ppltasks: catch(...): " << e.what() << endl;
+                        cout << "!!!naricc_debug!!! << ppltasks: catch(...): " << e.what() << endl;
                         // Rethrow will mark the exception as observed.
                         _M_exceptionHolder->_RethrowUserException();
                     }
@@ -1848,8 +1848,15 @@ struct _Task_impl_base
         }
 
         if (_HasUserException())
-        {
-            _M_exceptionHolder->_RethrowUserException();
+        {   
+            try {
+                _M_exceptionHolder->_RethrowUserException();
+            }
+            catch(Exception e)
+            {
+                cout << "!!!naricc_debug!!! ppltasks: if(_HasUserException): " << e.what << endl;
+            }
+
         }
         else if (_IsCanceled())
         {
