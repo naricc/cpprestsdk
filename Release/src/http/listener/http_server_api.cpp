@@ -95,8 +95,9 @@ pplx::task<void> http_server_api::register_listener(
             // register listener
             s_server_api->register_listener(listener).wait();
         }
-        catch (...)
+        catch (exception e)
         {
+            cout << "!!!naricc_debug!!! http_server_api::register_listener exception" << e.what();
             except = std::current_exception();
         }
 
@@ -112,6 +113,7 @@ pplx::task<void> http_server_api::register_listener(
                 }
                 catch (...)
                 {
+                    cout << "!!!naricc_debug!!! http_server_api::register_listener exception ignored";
                     // ignore this exception since we want to report the original one
                 }
             }

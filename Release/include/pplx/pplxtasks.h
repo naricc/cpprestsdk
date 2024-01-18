@@ -1854,7 +1854,8 @@ struct _Task_impl_base
             }
             catch(Exception e)
             {
-                cout << "!!!naricc_debug!!! ppltasks: if(_HasUserException): " << e.what << endl;
+                cout << "!!!naricc_debug!!! ppltasks: _Wait: if(_HasUserException): " << e.what << endl;
+                throw;
             }
 
         }

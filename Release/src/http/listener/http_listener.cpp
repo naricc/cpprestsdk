@@ -69,10 +69,15 @@ pplx::task<void> details::http_listener_impl::open()
 {
     // Do nothing if the open operation was already attempted
     // Not thread safe
+    cout << "!!!naricc_debug!!! details::http_listener_impl::open() called" << endl;
+
     if (!m_closed) return pplx::task_from_result();
 
     if (m_uri.is_empty()) throw std::invalid_argument("No URI defined for listener.");
     m_closed = false;
+
+    
+    cout << "!!!naricc_debug!!! details::http_listener_impl::open() pre-return" << endl;
 
     return web::http::experimental::details::http_server_api::register_listener(this).then(
         [this](pplx::task<void> openOp) {
@@ -81,9 +86,10 @@ pplx::task<void> details::http_listener_impl::open()
                 // If failed to open need to mark as closed.
                 openOp.wait();
             }
-            catch (...)
+            catch (std::exception e)
             {
                 m_closed = true;
+                cout << "!!!naricc_debug!!! details::http_listener_impl::open: lambda: e.what(): " << e.what() << endl;
                 throw;
             }
             return openOp;
