@@ -4902,6 +4902,7 @@ template<typename _Ty>
 __declspec(noinline) auto create_task(_Ty _Param, task_options _TaskOptions = task_options())
     -> task<typename details::_TaskTypeFromParam<_Ty>::_Type>
 {
+    cout << "!!!naricc_debug!!! pplxtasks.h: create_task: entered" << endl;
     static_assert(!std::is_same<typename details::_TaskTypeFromParam<_Ty>::_Type, details::_BadArgType>::value,
 #if defined(__cplusplus_winrt)
                   "incorrect argument for create_task; can be a callable object, an asynchronous operation, or a "
@@ -4910,8 +4911,14 @@ __declspec(noinline) auto create_task(_Ty _Param, task_options _TaskOptions = ta
                   "incorrect argument for create_task; can be a callable object or a task_completion_event"
 #endif /* defined (__cplusplus_winrt) */
     );
+    
+    cout << "!!!naricc_debug!!! pplxtasks.h: create_task: before set_creation_callstack" << endl;
     details::_get_internal_task_options(_TaskOptions)._set_creation_callstack(PPLX_CAPTURE_CALLSTACK());
+    cout << "!!!naricc_debug!!! pplxtasks.h: create_task: after set_creation_callstack" << endl;
+
+    cout << "!!!naricc_debug!!! pplxtasks.h: create_task: before _CreatedTask" << endl;
     task<typename details::_TaskTypeFromParam<_Ty>::_Type> _CreatedTask(_Param, _TaskOptions);
+    cout << "!!!naricc_debug!!! pplxtasks.h: create_task: after _CreatedTask" << endl;
     return _CreatedTask;
 }
 

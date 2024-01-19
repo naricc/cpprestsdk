@@ -61,7 +61,7 @@ void http_server_api::unsafe_register_server_api(std::unique_ptr<http_server> se
         throw http_exception(_XPLATSTR("Current server API instance has listeners attached."));
     }
 
-    s_server_api.swap(server_api);<<
+    s_server_api.swap(server_api);
 }
 
 pplx::task<void> http_server_api::register_listener(
