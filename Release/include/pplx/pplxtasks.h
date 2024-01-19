@@ -1852,9 +1852,9 @@ struct _Task_impl_base
             try {
                 _M_exceptionHolder->_RethrowUserException();
             }
-            catch(Exception e)
+            catch(std::exception e)
             {
-                cout << "!!!naricc_debug!!! ppltasks: _Wait: if(_HasUserException): " << e.what << endl;
+                cout << "!!!naricc_debug!!! ppltasks: _Wait: if(_HasUserException): " << e.what() << endl;
                 throw;
             }
 

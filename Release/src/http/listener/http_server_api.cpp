@@ -67,6 +67,8 @@ void http_server_api::unsafe_register_server_api(std::unique_ptr<http_server> se
 pplx::task<void> http_server_api::register_listener(
     _In_ web::http::experimental::listener::details::http_listener_impl* listener)
 {
+    cout << "!!!naricc_debug!!! entered register_listener" << endl;
+
     return pplx::create_task([listener]() {
         pplx::extensibility::scoped_critical_section_t lock(s_lock);
 
@@ -76,7 +78,9 @@ pplx::task<void> http_server_api::register_listener(
 #if defined(_WIN32) && !defined(CPPREST_FORCE_HTTP_LISTENER_ASIO)
             auto server_api = make_http_httpsys_server();
 #else
+            cout << "!!!naricc_debug!!! << Before make_http_asio_server" << endl;
             auto server_api = make_http_asio_server();
+            cout << "!!!naricc_debug!!! << Before make_http_asio_server" << endl;
 #endif
             http_server_api::unsafe_register_server_api(std::move(server_api));
 
