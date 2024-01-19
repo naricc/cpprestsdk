@@ -86,7 +86,7 @@ pplx::task<void> details::http_listener_impl::open()
     cout << "!!!naricc_debug!!! details:http_listener_impl: before then" << endl;
     auto taskResult = rltask.then(
         [this](pplx::task<void> openOp) {
-            std::raise(SIGTRAP);
+            raise(SIGTRAP);
             try
             {
                 // If failed to open need to mark as closed.

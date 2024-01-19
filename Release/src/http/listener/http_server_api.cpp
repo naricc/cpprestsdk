@@ -70,7 +70,7 @@ pplx::task<void> http_server_api::register_listener(
     cout << "!!!naricc_debug!!! entered register_listener" << endl;
 
     return pplx::create_task([listener]() {
-        std::raise(SIGTRAP);
+        raise(SIGTRAP);
         cout << "!!!naricc_debug!!! http_server_api.cpp>> Before lock" << endl;
         pplx::extensibility::scoped_critical_section_t lock(s_lock);
         cout << "!!!naricc_debug!!! http_server_api.cpp>> After lock" << endl;
