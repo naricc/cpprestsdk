@@ -79,7 +79,12 @@ pplx::task<void> details::http_listener_impl::open()
     
     cout << "!!!naricc_debug!!! details::http_listener_impl::open() pre-return" << endl;
 
-    return web::http::experimental::details::http_server_api::register_listener(this).then(
+    cout << "!!!naricc_debu!!! details::http_listener_impl: before register listener" << endl;
+    pplx::task<void> rltask = web::http::experimental::details::http_server_api::register_listener(this)
+    cout << "!!!naricc_debug!!! details::http_listener_impl: after register listener" << endl;
+ 
+    cout << "!!!naricc_debug!!! details:http_listener_impl: before then" << endl
+    var taskResult = rltask.then(
         [this](pplx::task<void> openOp) {
             try
             {
@@ -97,6 +102,10 @@ pplx::task<void> details::http_listener_impl::open()
             cout << "!!!naricc_debug!!! details::http_listener_impl:open: in lambda returning" << endl;
             return openOp;
         });
+    
+    cout << "!!!naricc_debug!!! details:http_listener_impl: after then" << endl;
+    
+    return taskResult; 
 }
 
 pplx::task<void> details::http_listener_impl::close()
