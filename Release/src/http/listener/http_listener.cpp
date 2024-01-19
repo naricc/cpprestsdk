@@ -84,6 +84,7 @@ pplx::task<void> details::http_listener_impl::open()
             try
             {
                 // If failed to open need to mark as closed.
+                cout << "!!!naricc_debug!!! details::http_listener_impl:open: in lambda" << endl
                 openOp.wait();
             }
             catch (std::exception e)
@@ -92,6 +93,8 @@ pplx::task<void> details::http_listener_impl::open()
                 cout << "!!!naricc_debug!!! details::http_listener_impl::open: lambda: e.what(): " << e.what() << endl;
                 throw;
             }
+            
+            cout << "!!!naricc_debug!!! details::http_listener_impl:open: in lambda returning" << endl
             return openOp;
         });
 }
