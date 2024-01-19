@@ -83,7 +83,7 @@ pplx::task<void> details::http_listener_impl::open()
     pplx::task<void> rltask = web::http::experimental::details::http_server_api::register_listener(this)
     cout << "!!!naricc_debug!!! details::http_listener_impl: after register listener" << endl;
  
-    cout << "!!!naricc_debug!!! details:http_listener_impl: before then" << endl
+    cout << "!!!naricc_debug!!! details:http_listener_impl: before then" << endl;
     auto taskResult = rltask.then(
         [this](pplx::task<void> openOp) {
             try
