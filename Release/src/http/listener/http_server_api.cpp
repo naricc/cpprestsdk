@@ -61,7 +61,7 @@ void http_server_api::unsafe_register_server_api(std::unique_ptr<http_server> se
         throw http_exception(_XPLATSTR("Current server API instance has listeners attached."));
     }
 
-    s_server_api.swap(server_api);
+    s_server_api.swap(server_api);<<
 }
 
 pplx::task<void> http_server_api::register_listener(
@@ -70,7 +70,9 @@ pplx::task<void> http_server_api::register_listener(
     cout << "!!!naricc_debug!!! entered register_listener" << endl;
 
     return pplx::create_task([listener]() {
+        cout << "!!!naricc_debug!!! http_server_api.cpp>> Before lock" << endl;
         pplx::extensibility::scoped_critical_section_t lock(s_lock);
+        cout << "!!!naricc_debug!!! http_server_api.cpp>> After lock" << endl;
 
         // the server API was not initialized, register a default
         if (s_server_api == nullptr)
@@ -78,9 +80,9 @@ pplx::task<void> http_server_api::register_listener(
 #if defined(_WIN32) && !defined(CPPREST_FORCE_HTTP_LISTENER_ASIO)
             auto server_api = make_http_httpsys_server();
 #else
-            cout << "!!!naricc_debug!!! << Before make_http_asio_server" << endl;
+            cout << "!!!naricc_debug!!! << http_server_api.cpp: Before make_http_asio_server" << endl;
             auto server_api = make_http_asio_server();
-            cout << "!!!naricc_debug!!! << Before make_http_asio_server" << endl;
+            cout << "!!!naricc_debug!!! << http_server_api.cpp: Before make_http_asio_server" << endl;
 #endif
             http_server_api::unsafe_register_server_api(std::move(server_api));
 
