@@ -1340,15 +1340,21 @@ pplx::task<void> http_linux_server::register_listener(http_listener_impl* listen
     bool is_https = listener->uri().scheme() == U("https");
 
     {
+        cout << "!!!naricc_debug!!! http_server_asio.cpp: http_linux_server::register_listener: entered" << endl;
+
+
         pplx::extensibility::scoped_rw_lock_t lock(m_listeners_lock);
         if (m_registered_listeners.find(listener) != m_registered_listeners.end())
         {
+            cout << "!!!naricc_debug!!! http_server_asio.cpp:http_linux_server::register_listener: throwing listener already registered" << endl;
             throw std::invalid_argument("listener already registered");
         }
 
         try
         {
             m_registered_listeners[listener] = make_unique<pplx::extensibility::reader_writer_lock_t>();
+
+            cout << "!!!naricc_debug!!! http_server_asio.cpp:http_linux_server::register_listener: try block" << endl;
 
             auto found_hostport_listener = m_listeners.find(hostport);
             if (found_hostport_listener == m_listeners.end())
@@ -1373,6 +1379,8 @@ pplx::task<void> http_linux_server::register_listener(http_listener_impl* listen
             // Future improvement - really this API should entirely be asynchronously.
             // the hostport_listener::start() method should be made to return a task
             // throwing the exception.
+            cout << "!!!naricc_debug!!! http_server_asio.cpp:http_linux_server::register_listener: caught" << endl;
+
             m_registered_listeners.erase(listener);
             m_listeners.erase(hostport);
             throw;
