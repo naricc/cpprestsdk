@@ -160,6 +160,7 @@ struct uninitialized
     template<class... Args>
     void construct(Args&&... vals)
     {
+        cout << "!!!naricc_debug!!! threadpool.cpp: construct(Args&&... vals) called." << endl;
         ::new (static_cast<void*>(&storage)) T(std::forward<Args>(vals)...);
         initialized = true;
     }
@@ -181,6 +182,7 @@ std::pair<bool, platform_shared_threadpool*> initialize_shared_threadpool(size_t
         initialized_this_time = true;
     });
 
+    cout "!!!naricc_debug!!! threadpool.cpp: Returning from initialize_shared_threadpool" << endl;
     return
     {
         initialized_this_time,
@@ -195,7 +197,16 @@ std::pair<bool, platform_shared_threadpool*> initialize_shared_threadpool(size_t
 
 namespace crossplat
 {
-threadpool& threadpool::shared_instance() { return initialize_shared_threadpool(40).second->get_shared(); }
+threadpool& threadpool::shared_instance() { 
+                                            auto retVal = initialize_shared_threadpool(40);
+
+                                            cout << "!!!naricc_debug!!! threadpool.cpp: threadpool:shared_instance: initilize_shared_threadpool return " << retVal.first < "; " retVal.second << endl; 
+
+                                            auto getSharedRetVal = retVal.second->get_shared();
+
+                                            cout << "!!!naricc_debug!!! threadpool.cpp: threadpool:shared_instance: got back from get_shared " << getSharedRetVal << endl;
+                                         
+                                            return getSharedRetVal;}
 
 void threadpool::initialize_with_threads(size_t num_threads)
 {

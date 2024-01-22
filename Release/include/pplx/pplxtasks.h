@@ -1822,6 +1822,7 @@ struct _Task_impl_base
                         _CancelWithException(std::current_exception());
                     }
                
+                    cout << "!!!naricc_debug!!! ppltask.h: catch(...)"
                     try
                     {
                          exception_ptr ex_ptr = std::current_exception();
@@ -1854,7 +1855,7 @@ struct _Task_impl_base
             }
             catch(std::exception e)
             {
-                cout << "!!!naricc_debug!!! ppltasks: _Wait: if(_HasUserException): " << e.what() << endl;
+                cout << "!!!naricc_debug!!! ppltasks: _Wait: if(_HasUserException): \"\"\" " << e.what() << "\"\"\"" << endl;
                 throw;
             }
 
