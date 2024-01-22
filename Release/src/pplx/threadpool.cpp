@@ -182,7 +182,7 @@ std::pair<bool, platform_shared_threadpool*> initialize_shared_threadpool(size_t
         initialized_this_time = true;
     });
 
-    cout "!!!naricc_debug!!! threadpool.cpp: Returning from initialize_shared_threadpool" << endl;
+    cout << "!!!naricc_debug!!! threadpool.cpp: Returning from initialize_shared_threadpool" << endl;
     return
     {
         initialized_this_time,
@@ -200,15 +200,12 @@ namespace crossplat
 threadpool& threadpool::shared_instance() { 
                                             auto retVal = initialize_shared_threadpool(40);
 
-                                            cout << "!!!naricc_debug!!! threadpool.cpp: threadpool:shared_instance: initilize_shared_threadpool return " << retVal.first < "; " retVal.second << endl; 
-
-                                            auto getSharedRetVal = retVal.second->get_shared();
-
-                                            cout << "!!!naricc_debug!!! threadpool.cpp: threadpool:shared_instance: got back from get_shared " << getSharedRetVal << endl;
+                                            cout << "!!!naricc_debug!!! threadpool.cpp: threadpool:shared_instance: initilize_shared_threadpool return " << retVal.first << "; " << (retVal.second ? "null": "not null") << endl; 
                                          
-                                            return getSharedRetVal;}
+                                            return retVal.second->get_shared();}
 
 void threadpool::initialize_with_threads(size_t num_threads)
+
 {
     const auto result = initialize_shared_threadpool(num_threads);
     if (!result.first)

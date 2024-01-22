@@ -1821,8 +1821,7 @@ struct _Task_impl_base
                     {
                         _CancelWithException(std::current_exception());
                     }
-               
-                    cout << "!!!naricc_debug!!! ppltask.h: catch(...)"
+
                     try
                     {
                          exception_ptr ex_ptr = std::current_exception();
